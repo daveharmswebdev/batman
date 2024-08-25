@@ -1,4 +1,13 @@
 import express from 'express';
+import dotenv from 'dotenv';
+import path from 'path';
+
+const envFilePath = path.resolve(
+  process.cwd(),
+  `.env.${process.env.NODE_ENV} || 'development'`,
+);
+
+dotenv.config({ path: envFilePath });
 
 const app = express();
 const port = process.env.PORT || 3000;
