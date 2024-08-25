@@ -3,10 +3,9 @@ POST localhost:3000/posts
 Content-Type: application/json
 
 {
-  "title": "Test2",
-  "content": "content2",
-  "published": false,
-  "authorId": 1
+  "title": "Test with zod testing published",
+  "content": "content2 content2",
+  "authorId": -1
 }
 
 ### PUT
