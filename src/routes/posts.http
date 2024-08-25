@@ -1,0 +1,33 @@
+### POST request to example server
+POST localhost:3000/posts
+Content-Type: application/json
+
+{
+  "title": "Test2",
+  "content": "content2",
+  "published": false,
+  "authorId": 1
+}
+
+### PUT
+PUT localhost:3000/posts/1
+Content-Type: application/json
+
+{
+  "title": "Test (updated)",
+  "content": "content (updated)",
+  "published": false,
+  "authorId": 1
+}
+
+### GET
+GET localhost:3000/posts
+Accept: application/json
+
+### GET by Id
+GET localhost:3000/posts/1
+Accept: application/json
+
+### DELETE
+DELETE localhost:3000/posts/5
+Accept: application/json
