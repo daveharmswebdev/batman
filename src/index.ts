@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
+import userRoutes from './routes/userRoutes';
 
 const envFilePath = path.resolve(
   process.cwd(),
@@ -14,9 +15,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.get('/api', (req: express.Request, res: express.Response) => {
-  res.json({ message: 'Hello World! Hello Nashville!!! And Hello Dave!!!!' });
-});
+app.use('/users', userRoutes);
 
 app.listen(port, () => {
   console.log('Server running on port: ' + port);
