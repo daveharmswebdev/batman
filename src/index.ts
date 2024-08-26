@@ -1,11 +1,15 @@
 import express from 'express';
-import dotenv, { config } from 'dotenv';
+import dotenv from 'dotenv';
 import path from 'path';
-import * as configs from './config';
 import morgan from 'morgan';
-import logger from './logger';
 import createError from 'http-errors';
 import compression from 'compression';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yaml';
+import fs from 'fs';
+
+import * as configs from './config';
+import logger from './logger';
 import errorHandler from './middleware/errorHandler';
 
 const envFilePath = path.resolve(
@@ -18,6 +22,12 @@ dotenv.config({ path: envFilePath });
 const app = express();
 const port = process.env.PORT || 3000;
 
+const swaggerFile = fs.readFileSync(
+  path.join(__dirname, '../swagger.yaml'),
+  'utf8',
+);
+const swaggerDocument = YAML.parse(swaggerFile);
+
 app.use(
   morgan('combined', {
     stream: { write: (message) => logger.info(message.trim()) },
@@ -25,6 +35,8 @@ app.use(
 );
 app.use(express.json());
 app.use(compression(configs.compressionConfig));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 configs.routerConfig(app);
 app.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
