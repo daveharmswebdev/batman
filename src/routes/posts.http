@@ -1,11 +1,11 @@
 ### POST request to example server
-POST localhost:3000/posts
+POST localhost:3000/api/posts
 Content-Type: application/json
 
 {
-  "title": "Test with zod testing published",
+  "title": "Test",
   "content": "content2 content2",
-  "authorId": -1
+  "authorId": 11
 }
 
 ### PUT
@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ### GET
-GET localhost:3000/posts
+GET localhost:3000/api/posts
 Accept: application/json
 
 ### GET by Id

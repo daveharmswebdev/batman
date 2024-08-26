@@ -1,10 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
-import userRoutes from './routes/userRoutes';
-import postsRoutes from './routes/postsRoutes';
+import * as configs from './config';
 import morgan from 'morgan';
 import logger from './logger';
+import createError from 'http-errors';
+import errorHandler from './middleware/errorHandler';
 
 const envFilePath = path.resolve(
   process.cwd(),
@@ -23,8 +24,14 @@ app.use(
 );
 app.use(express.json());
 
-app.use('/users', userRoutes);
-app.use('/posts', postsRoutes);
+configs.routerConfig(app);
+app.use(
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    next(createError(404, 'Resource Not Found'));
+  },
+);
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log('Server running on port: ' + port);
