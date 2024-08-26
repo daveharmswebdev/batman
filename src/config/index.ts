@@ -1,3 +1,4 @@
 import routerConfig from './router';
+import compressionConfig from './compression';
 
-export { routerConfig };
+export { routerConfig, compressionConfig };

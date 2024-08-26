@@ -1,21 +1,29 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import prisma from '../prismaClient';
+import createError from 'http-errors';
 
-export const getAllPosts = async (req: Request, res: Response) => {
+export const getAllPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const posts = await prisma.post.findMany();
     res.json(posts);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: 'Error getting all posts' });
+    next(createError(500, 'Failed to get all posts'));
   }
 };
 
-export const getPostById = async (req: Request, res: Response) => {
+export const getPostById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { id } = req.params;
 
   if (!id || isNaN(parseInt(id, 10))) {
-    return res.status(400).json({ error: 'Invalid or missing post ID' });
+    next(createError(400, 'Invalid or missing post ID'));
   }
 
   try {
@@ -25,15 +33,18 @@ export const getPostById = async (req: Request, res: Response) => {
     if (post) {
       res.json(post);
     } else {
-      res.status(404).json({ error: 'Post not found' });
+      next(createError(404, 'Post not found'));
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error getting post by id' });
+    next(createError(500, 'Error getting post by id'));
   }
 };
 
-export const createPost = async (req: Request, res: Response) => {
+export const createPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { title, content, published, authorId } = req.body;
   try {
     const post = await prisma.post.create({
@@ -46,12 +57,15 @@ export const createPost = async (req: Request, res: Response) => {
     });
     res.status(201).json(post);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error creating post' });
+    next(createError(500, 'Error creating post'));
   }
 };
 
-export const updatePostById = async (req: Request, res: Response) => {
+export const updatePostById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { id } = req.params;
   const { title, content, published, authorId } = req.body;
   try {
@@ -66,12 +80,15 @@ export const updatePostById = async (req: Request, res: Response) => {
     });
     res.json(updatedPost);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error updating post' });
+    next(createError(500, 'Error updating post'));
   }
 };
 
-export const deletePostById = async (req: Request, res: Response) => {
+export const deletePostById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { id } = req.params;
   try {
     await prisma.post.delete({
@@ -79,7 +96,6 @@ export const deletePostById = async (req: Request, res: Response) => {
     });
     res.status(204).send();
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error deleting post' });
+    next(createError(500, 'Error deleting post'));
   }
 };

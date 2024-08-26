@@ -1,10 +1,11 @@
 import express from 'express';
-import dotenv from 'dotenv';
+import dotenv, { config } from 'dotenv';
 import path from 'path';
 import * as configs from './config';
 import morgan from 'morgan';
 import logger from './logger';
 import createError from 'http-errors';
+import compression from 'compression';
 import errorHandler from './middleware/errorHandler';
 
 const envFilePath = path.resolve(
@@ -23,7 +24,7 @@ app.use(
   }),
 );
 app.use(express.json());
-
+app.use(compression(configs.compressionConfig));
 configs.routerConfig(app);
 app.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

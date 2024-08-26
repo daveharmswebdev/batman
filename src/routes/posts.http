@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### PUT
-PUT localhost:3000/posts/1
+PUT localhost:3000/posts/11
 Content-Type: application/json
 
 {
