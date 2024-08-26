@@ -1,7 +1,7 @@
 import { z, ZodError } from 'zod';
 import { Request, Response } from 'express';
 
-const createPostSchema = z.object({
+export const createPostSchema = z.object({
   title: z.string().min(1, 'Title is required').max(50, 'Title is too long'),
   content: z
     .string()
