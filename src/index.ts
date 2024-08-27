@@ -14,12 +14,13 @@ import logger from './logger';
 import errorHandler from './middleware/errorHandler';
 import redisClient from './services/redisClient';
 
-const envFilePath = path.resolve(
-  process.cwd(),
-  `.env.${process.env.NODE_ENV} || 'development'`,
-);
-
-dotenv.config({ path: envFilePath });
+if (process.env.NODE_ENV !== 'production') {
+  const envFilePath = path.resolve(
+    process.cwd(),
+    `.env.${process.env.NODE_ENV} || 'development'`,
+  );
+  dotenv.config({ path: envFilePath });
+}
 
 const app = express();
 const port = process.env.PORT || 3000;
