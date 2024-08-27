@@ -24,9 +24,9 @@ GET localhost:3000/api/posts
 Accept: application/json
 
 ### GET by Id
-GET localhost:3000/posts/1
+GET localhost:3000/api/posts/1
 Accept: application/json
 
 ### DELETE
-DELETE localhost:3000/posts/5
+DELETE localhost:3000/api/posts/5
 Accept: application/json

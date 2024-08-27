@@ -7,13 +7,23 @@ import {
   updatePostById,
 } from '../controllers/postsController';
 import { validateCreatePost } from '../validators/postsValidator';
+import { redisCacheMiddleware } from '../middleware/redisCacheMiddleware';
+import { cacheInvalidationMiddleware } from '../middleware/cacheInvalidationMiddleware';
 
 const router = Router();
 
-router.get('/', getAllPosts);
-router.get('/:id', getPostById);
-router.post('/', validateCreatePost, createPost);
-router.put('/:id', updatePostById);
-router.delete('/:id', deletePostById);
+router.get(
+  '/',
+  redisCacheMiddleware(() => 'all_posts'),
+  getAllPosts,
+);
+router.get(
+  '/:id',
+  redisCacheMiddleware((req) => `post_${req.params.id}`),
+  getPostById,
+);
+router.post('/', validateCreatePost, cacheInvalidationMiddleware, createPost);
+router.put('/:id', cacheInvalidationMiddleware, updatePostById);
+router.delete('/:id', cacheInvalidationMiddleware, deletePostById);
 
 export default router;

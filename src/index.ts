@@ -12,6 +12,7 @@ import cors from 'cors';
 import * as configs from './config';
 import logger from './logger';
 import errorHandler from './middleware/errorHandler';
+import redisClient from './services/redisClient';
 
 const envFilePath = path.resolve(
   process.cwd(),
@@ -50,4 +51,13 @@ app.use(errorHandler);
 
 app.listen(port, () => {
   console.log('Server running on port: ' + port);
+
+  redisClient
+    .connect()
+    .then((res) => {
+      logger.info('Connected to Redis', res);
+    })
+    .catch((err) => {
+      logger.error('Error connecting to Redis', err.message);
+    });
 });
