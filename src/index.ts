@@ -7,6 +7,7 @@ import compression from 'compression';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yaml';
 import fs from 'fs';
+import cors from 'cors';
 
 import * as configs from './config';
 import logger from './logger';
@@ -34,6 +35,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(cors(configs.corsConfig));
 app.use(compression(configs.compressionConfig));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
