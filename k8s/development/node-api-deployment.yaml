@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-api-deployment
+  labels:
+    app: node-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-api
+  template:
+    metadata:
+      labels:
+        app: node-api
+    spec:
+      containers:
+        - name: node-api
+          image: gcr.io/batman39146/batman_api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: DATABASE_URL
+              value: "postgresql://postgres:password@postgres-service:5432/batman_db"
+            - name: REDIS_HOST
+              value: "redis-service"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: CORS_ALLOWED_ORIGIN
+              value: "http://localhost:5173,http://localhost:4200"
+          command: ["/bin/sh", "-c", "npx prisma migrate deploy && npm start"]
