@@ -31,4 +31,8 @@ spec:
               value: "6379"
             - name: CORS_ALLOWED_ORIGIN
               value: "http://localhost:5173,http://localhost:4200"
+            - name: JWT_SECRET
+              value: "your_very_secret_key"  # Add your JWT secret key here
+            - name: JWT_EXPIRES_IN
+              value: "1d"  # Set JWT expiration time to 1 day
           command: ["/bin/sh", "-c", "npx prisma migrate deploy && npm start"]

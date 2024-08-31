@@ -13,6 +13,8 @@ services:
       - CORS_ALLOWED_ORIGIN=http://localhost:5173,http://localhost:4200
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - JWT_SECRET=your_very_secret_key
+      - JWT_EXPIRES_IN=1d
     depends_on:
       - db
       - redis

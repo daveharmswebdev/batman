@@ -12,7 +12,7 @@ const errorHandler = (
   const statusCode = err.status || 500;
   const response = {
     message: err.message || 'Something went wrong',
-    ...(process.env.NODE_ENV !== 'development' && { stack: err.stack }),
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
   };
 
   logger.error(
