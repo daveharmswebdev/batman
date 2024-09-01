@@ -26,17 +26,24 @@ model Post {
 }
 
 model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
+  id       Int     @id @default(autoincrement())
+  bio      String?
+  address1 String?
+  address2 String?
+  city     String?
+  state    String?
+  zip      String?
+  user     User    @relation(fields: [userId], references: [id])
+  userId   Int     @unique
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  name     String?
-  password String
-  posts    Post[]
-  profile  Profile?
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  firstName  String
+  middleName String?
+  lastName   String
+  password   String
+  posts      Post[]
+  profile    Profile?
 }

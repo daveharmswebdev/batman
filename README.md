@@ -19,3 +19,8 @@ gcloud container clusters create batman-dev-cluster --num-nodes=3 --zone=us-cent
 ```kubernetes helm
 gcloud container clusters get-credentials batman-dev-cluster --zone=us-central1-a
 ```
+
+### Creating and running prisma migrations
+```javascript
+npx dotenv -e .env.development -- npx prisma migrate dev --name initial
+```

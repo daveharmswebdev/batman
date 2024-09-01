@@ -13,6 +13,7 @@ import * as configs from './config';
 import logger from './logger';
 import errorHandler from './middleware/errorHandler';
 import redisClient from './services/redisClient';
+import { initializePassport } from './config/passport';
 
 if (process.env.NODE_ENV !== 'production') {
   const envFilePath = path.resolve(
@@ -39,6 +40,10 @@ app.use(
 app.use(express.json());
 app.use(cors(configs.corsConfig));
 app.use(compression(configs.compressionConfig));
+
+// initialize passport
+app.use(initializePassport);
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 configs.routerConfig(app);
