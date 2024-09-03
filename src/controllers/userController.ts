@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from 'express';
 import prisma from '../prismaClient';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import createError from 'http-errors';
+import { NextFunction, Request, Response } from 'express';
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany();
-    res.json(users);
+    (res as Response).json(users);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'failed to get all users' });
