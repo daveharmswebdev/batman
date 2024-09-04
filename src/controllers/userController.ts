@@ -78,7 +78,12 @@ export const loginUser = async (
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      {
+        id: user.id,
+        email: user.email,
+        username:
+          `${user.firstName}${user.middleName ? ' ' + user.middleName + ' ' : ' '}${user.lastName}`.trim(),
+      },
       process.env.JWT_SECRET!,
       { expiresIn: process.env.JWT_EXPIRES_IN },
     );
