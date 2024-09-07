@@ -1,8 +1,8 @@
 import prisma from '../prismaClient';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import createError from 'http-errors';
 import { NextFunction, Request, Response } from 'express';
+import { generateAccessToken, generateRefreshToken } from './tokenHelper';
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -46,13 +46,7 @@ export const createUser = async (
       },
     });
 
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRES_IN },
-    );
-
-    res.status(201).json({ user, token });
+    res.status(201).json({ user });
   } catch (error) {
     console.log(error);
     next(createError(500, 'Error creating user'));
@@ -77,16 +71,15 @@ export const loginUser = async (
       return next(createError(401, 'Invalid password or password'));
     }
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-        username:
-          `${user.firstName}${user.middleName ? ' ' + user.middleName + ' ' : ' '}${user.lastName}`.trim(),
-      },
-      process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRES_IN },
-    );
+    const token = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    res.cookie('refresh-token', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/refresh-token',
+    });
 
     res.json({ token });
   } catch (error) {

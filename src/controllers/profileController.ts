@@ -4,7 +4,6 @@ import prisma from '../prismaClient';
 import logger from '../logger';
 import { CustomRequest } from '../types/customTypes';
 import { User } from '@prisma/client';
-import { profile } from 'winston';
 
 export const getAllProfiles = async (
   req: Request,
@@ -74,9 +73,13 @@ export const createProfile = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const user = req.user as User;
+  if (!user) {
+    return next(createError(401, 'Unauthorized: User not found'));
+  }
+
   try {
-    // @ts-ignore
-    const userId = req.user.id;
+    const { id } = user;
 
     const { bio, address1, address2, city, state, zip } = req.body;
     const profile = await prisma.profile.create({
@@ -88,13 +91,21 @@ export const createProfile = async (
         state,
         zip,
         user: {
-          connect: { id: userId },
+          connect: { id },
         },
       },
     });
 
     res.status(201).json(profile);
-  } catch (err: any) {
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      logger.error(`Error creating profile: ${err.message}`, {
+        stack: err.stack,
+        userId: user.id,
+      });
+    } else {
+      logger.error(`Unknown error occurred, ${err}`);
+    }
     next(createError(500, 'Error'));
   }
 };
