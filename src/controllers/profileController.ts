@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import createError from 'http-errors';
 import prisma from '../prismaClient';
 import logger from '../logger';
-import { CustomRequest } from '../types/customTypes';
 import { User } from '@prisma/client';
 
 export const getAllProfiles = async (
@@ -27,7 +26,7 @@ export const getAllProfiles = async (
 };
 
 export const getProfileById = async (
-  req: CustomRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {

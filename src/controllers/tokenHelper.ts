@@ -6,6 +6,7 @@ const generateTokenPayload = (user: User) => ({
   email: user.email,
   username:
     `${user.firstName}${user.middleName ? ' ' + user.middleName + ' ' : ' '}${user.lastName}`.trim(),
+  role: user.role,
 });
 
 export const generateAccessToken = (user: User) =>

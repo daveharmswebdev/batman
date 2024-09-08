@@ -16,7 +16,6 @@ router.get('/', getAllProfiles);
 router.get(
   '/:id',
   passport.authenticate('jwt', { session: false }),
-  // @ts-ignore
   getProfileById,
 );
 
